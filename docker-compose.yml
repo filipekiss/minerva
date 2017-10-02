@@ -1,0 +1,50 @@
+version: '2.0'
+
+services:
+
+  #------------------------------------------------------------------
+  # Volumes
+  #------------------------------------------------------------------
+
+  volume_media:
+    container_name: minerva_media
+    image: tianon/true
+    environment:
+      PGID: ${MINERVA_CONFIG_PGID}
+      PUID: ${MINERVA_CONFIG_PUID}
+    networks:
+      minerva:
+        ipv4_address: ${MINERVA_NETWORK_MEDIA_IP}
+    volumes:
+      - ${MINERVA_LOCATION_TORRENT_DOWNLOADS}:/downloads
+      - ${MINERVA_LOCATION_TORRENT_WATCH}:/watch
+
+  #------------------------------------------------------------------
+  # Services
+  #------------------------------------------------------------------
+  transmission:
+    container_name: minerva_transmission
+    image: linuxserver/transmission
+    networks:
+      minerva:
+        ipv4_address: ${MINERVA_NETWORK_TRANSMISSION_IP}
+    environment:
+      PGID: ${MINERVA_CONFIG_PGID}
+      PUID: ${MINERVA_CONFIG_PUID}
+    ports:
+      - ${MINERVA_NETWORK_TRANSMISSION_PORT_WEB}
+      - ${MINERVA_NETWORK_TRANSMISSION_PORT_TORRENT}
+      - ${MINERVA_NETWORK_TRANSMISSION_PORT_TORRENT_UDP}
+    volumes:
+      - ${HOME}/.Minerva/config/transmission:/config
+    volumes_from:
+      - volume_media
+
+
+networks:
+  minerva:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${MINERVA_CONFIG_NETWORK_SUBNET}
