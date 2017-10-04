@@ -4,8 +4,6 @@ HAS_DOCKER_COMPOSE=$(which docker-compose)
 MINERVA_CONFIG_LOCATION="${HOME}/.Minerva/config"
 SONARR_CONFIG_LOCATION="${MINERVA_CONFIG_LOCATION}/sonarr"
 FILES_TO_DELETE=(
-    config.xml
-    nzbdrone.db
     nzbdrone.db*
 )
 echo "Sonarr First Run"
@@ -14,7 +12,11 @@ echo "Stopping Sonarr"
 $HAS_DOCKER_COMPOSE stop sonarr
 echo "Deleting files"
 for FILE in ${FILES_TO_DELETE[@]}; do
-    rm "$SONARR_CONFIG_LOCATION/$FILE"
+    filesMatching=$(find $SONARR_CONFIG_LOCATION -iwholename "*/${FILE}")
+    for fileFound in ${filesMatching[@]}; do
+        echo "Deleting ${fileFound}"
+        rm -rf ${fileFound}
+    done;
 done;
 echo "Copy our defaults there"
 cp -r ./defaults/sonarr/* ${SONARR_CONFIG_LOCATION}
