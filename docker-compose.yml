@@ -15,9 +15,14 @@ services:
     networks:
       minerva:
         ipv4_address: ${MINERVA_NETWORK_MEDIA_IP}
+    extra_hosts:
+      - "${MINERVA_NETWORK_MEDIA_HOSTNAME}:${MINERVA_NETWORK_MEDIA_IP}"
+      - "${MINERVA_NETWORK_TRANSMISSION_HOSTNAME}:${MINERVA_NETWORK_TRANSMISSION_IP}"
+      - "${MINERVA_NETWORK_SONARR_HOSTNAME}:${MINERVA_NETWORK_SONARR_IP}"
     volumes:
       - ${MINERVA_LOCATION_TORRENT_DOWNLOADS}:/downloads
       - ${MINERVA_LOCATION_TORRENT_WATCH}:/watch
+      - ${MINERVA_LOCATION_TVSHOWS}:/tv
 
   #------------------------------------------------------------------
   # Services
@@ -28,6 +33,10 @@ services:
     networks:
       minerva:
         ipv4_address: ${MINERVA_NETWORK_TRANSMISSION_IP}
+    extra_hosts:
+      - "${MINERVA_NETWORK_MEDIA_HOSTNAME}:${MINERVA_NETWORK_MEDIA_IP}"
+      - "${MINERVA_NETWORK_TRANSMISSION_HOSTNAME}:${MINERVA_NETWORK_TRANSMISSION_IP}"
+      - "${MINERVA_NETWORK_SONARR_HOSTNAME}:${MINERVA_NETWORK_SONARR_IP}"
     environment:
       PGID: ${MINERVA_CONFIG_PGID}
       PUID: ${MINERVA_CONFIG_PUID}
@@ -37,6 +46,26 @@ services:
       - ${MINERVA_NETWORK_TRANSMISSION_PORT_TORRENT_UDP}
     volumes:
       - ${HOME}/.Minerva/config/transmission:/config
+    volumes_from:
+      - volume_media
+
+  sonarr:
+    container_name: minerva_sonarr
+    image: linuxserver/sonarr
+    networks:
+      minerva:
+        ipv4_address: ${MINERVA_NETWORK_SONARR_IP}
+    extra_hosts:
+      - "${MINERVA_NETWORK_MEDIA_HOSTNAME}:${MINERVA_NETWORK_MEDIA_IP}"
+      - "${MINERVA_NETWORK_TRANSMISSION_HOSTNAME}:${MINERVA_NETWORK_TRANSMISSION_IP}"
+      - "${MINERVA_NETWORK_SONARR_HOSTNAME}:${MINERVA_NETWORK_SONARR_IP}"
+    environment:
+      PGID: ${MINERVA_CONFIG_PGID}
+      PUID: ${MINERVA_CONFIG_PUID}
+    ports:
+      - ${MINERVA_NETWORK_SONARR_PORT}
+    volumes:
+      - ${HOME}/.Minerva/config/sonarr:/config
     volumes_from:
       - volume_media
 
