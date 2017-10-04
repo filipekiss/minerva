@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+HAS_DOCKER_COMPOSE=$(which docker-compose)
+MINERVA_CONFIG_LOCATION="${HOME}/.Minerva/config"
+RADARR_CONFIG_LOCATION="${MINERVA_CONFIG_LOCATION}/radarr"
+FILES_TO_DELETE=(
+    nzbdrone.db*
+)
+echo "radarr First Run"
+$HAS_DOCKER_COMPOSE start radarr
+echo "Stopping radarr"
+$HAS_DOCKER_COMPOSE stop radarr
+echo "Deleting files"
+for FILE in ${FILES_TO_DELETE[@]}; do
+    filesMatching=$(find $RADARR_CONFIG_LOCATION -iwholename "*/${FILE}")
+    for fileFound in ${filesMatching[@]}; do
+        echo "Deleting ${fileFound}"
+        rm -rf ${fileFound}
+    done;
+done;
+echo "Copy our defaults there"
+cp -r ./defaults/radarr/* ${RADARR_CONFIG_LOCATION}
+echo "Restarting radarr"
+$HAS_DOCKER_COMPOSE start radarr
+
+

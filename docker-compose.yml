@@ -19,10 +19,12 @@ services:
       - "${MINERVA_NETWORK_MEDIA_HOSTNAME}:${MINERVA_NETWORK_MEDIA_IP}"
       - "${MINERVA_NETWORK_TRANSMISSION_HOSTNAME}:${MINERVA_NETWORK_TRANSMISSION_IP}"
       - "${MINERVA_NETWORK_SONARR_HOSTNAME}:${MINERVA_NETWORK_SONARR_IP}"
+      - "${MINERVA_NETWORK_RADARR_HOSTNAME}:${MINERVA_NETWORK_RADARR_IP}"
     volumes:
       - ${MINERVA_LOCATION_TORRENT_DOWNLOADS}:/downloads
       - ${MINERVA_LOCATION_TORRENT_WATCH}:/watch
       - ${MINERVA_LOCATION_TVSHOWS}:/tv
+      - ${MINERVA_LOCATION_MOVIES}:/movies
 
   #------------------------------------------------------------------
   # Services
@@ -37,6 +39,7 @@ services:
       - "${MINERVA_NETWORK_MEDIA_HOSTNAME}:${MINERVA_NETWORK_MEDIA_IP}"
       - "${MINERVA_NETWORK_TRANSMISSION_HOSTNAME}:${MINERVA_NETWORK_TRANSMISSION_IP}"
       - "${MINERVA_NETWORK_SONARR_HOSTNAME}:${MINERVA_NETWORK_SONARR_IP}"
+      - "${MINERVA_NETWORK_RADARR_HOSTNAME}:${MINERVA_NETWORK_RADARR_IP}"
     environment:
       PGID: ${MINERVA_CONFIG_PGID}
       PUID: ${MINERVA_CONFIG_PUID}
@@ -59,6 +62,7 @@ services:
       - "${MINERVA_NETWORK_MEDIA_HOSTNAME}:${MINERVA_NETWORK_MEDIA_IP}"
       - "${MINERVA_NETWORK_TRANSMISSION_HOSTNAME}:${MINERVA_NETWORK_TRANSMISSION_IP}"
       - "${MINERVA_NETWORK_SONARR_HOSTNAME}:${MINERVA_NETWORK_SONARR_IP}"
+      - "${MINERVA_NETWORK_RADARR_HOSTNAME}:${MINERVA_NETWORK_RADARR_IP}"
     environment:
       PGID: ${MINERVA_CONFIG_PGID}
       PUID: ${MINERVA_CONFIG_PUID}
@@ -69,6 +73,26 @@ services:
     volumes_from:
       - volume_media
 
+  radarr:
+    container_name: minerva_radarr
+    image: linuxserver/radarr
+    networks:
+      minerva:
+        ipv4_address: ${MINERVA_NETWORK_RADARR_IP}
+    extra_hosts:
+      - "${MINERVA_NETWORK_MEDIA_HOSTNAME}:${MINERVA_NETWORK_MEDIA_IP}"
+      - "${MINERVA_NETWORK_TRANSMISSION_HOSTNAME}:${MINERVA_NETWORK_TRANSMISSION_IP}"
+      - "${MINERVA_NETWORK_SONARR_HOSTNAME}:${MINERVA_NETWORK_SONARR_IP}"
+      - "${MINERVA_NETWORK_RADARR_HOSTNAME}:${MINERVA_NETWORK_RADARR_IP}"
+    environment:
+      PGID: ${MINERVA_CONFIG_PGID}
+      PUID: ${MINERVA_CONFIG_PUID}
+    ports:
+      - ${MINERVA_NETWORK_RADARR_PORT}
+    volumes:
+      - ${HOME}/.Minerva/config/radarr:/config
+    volumes_from:
+      - volume_media
 
 networks:
   minerva:
