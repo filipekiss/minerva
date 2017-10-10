@@ -9,7 +9,6 @@ services:
   volume_media:
     container_name: minerva_media
     image: tianon/true
-    network_mode: host
     environment:
       PGID: ${MINERVA_CONFIG_PGID}
       PUID: ${MINERVA_CONFIG_PUID}
@@ -25,8 +24,9 @@ services:
   transmission:
     container_name: minerva_transmission
     image: linuxserver/transmission
-    network_mode: host
     hostname: ${MINERVA_NETWORK_TRANSMISSION_HOSTNAME}
+    ports:
+      - 9091:9091
     environment:
       PGID: ${MINERVA_CONFIG_PGID}
       PUID: ${MINERVA_CONFIG_PUID}
@@ -38,8 +38,9 @@ services:
   sonarr:
     container_name: minerva_sonarr
     image: linuxserver/sonarr
-    network_mode: host
     hostname: ${MINERVA_NETWORK_SONARR_HOSTNAME}
+    ports:
+      - 8989:8989
     environment:
       PGID: ${MINERVA_CONFIG_PGID}
       PUID: ${MINERVA_CONFIG_PUID}
@@ -51,8 +52,9 @@ services:
   radarr:
     container_name: minerva_radarr
     image: linuxserver/radarr
-    network_mode: host
     hostname: ${MINERVA_NETWORK_RADARR_HOSTNAME}
+    ports:
+      - 7878:7878
     environment:
       PGID: ${MINERVA_CONFIG_PGID}
       PUID: ${MINERVA_CONFIG_PUID}
@@ -65,7 +67,17 @@ services:
     container_name: minerva_plex
     image: linuxserver/plex
     hostname: ${MINERVA_NETWORK_PLEX_HOSTNAME}
-    network_mode: host
+    ports:
+      - 1900:1900/udp
+      - 3005:3005
+      - 32400:32400
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+      - 32469:32469
+      - 5353:5353/udp
+      - 8324:8324
     environment:
       PGID: ${MINERVA_CONFIG_PGID}
       PUID: ${MINERVA_CONFIG_PUID}
