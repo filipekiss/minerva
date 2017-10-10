@@ -53,7 +53,8 @@ instances.
 care about in this file are the `PGID` and `PUID`. Ensure they are the same as the user you wish to
 run the containers as. You may create a user just for this or you can use your own user. You can use
 the command `id $(whoami)` to find you user id. Linux boxes usually have `1000` as your UID and
-macOS usually 501 (it may vary).
+macOS usually `501` (it may vary). For the GID, Linux should work with `1000` and macOS usually is
+`20`.
 
  - Clone this repository, cd into it and run `docker-compose up -d`
 
