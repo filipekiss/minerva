@@ -25,6 +25,10 @@ services:
     container_name: minerva_transmission
     image: linuxserver/transmission
     hostname: ${MINERVA_NETWORK_TRANSMISSION_HOSTNAME}
+    networks:
+      minerva:
+        aliases:
+          - ${MINERVA_NETWORK_TRANSMISSION_HOSTNAME}
     ports:
       - 9091:9091
     environment:
@@ -39,6 +43,10 @@ services:
     container_name: minerva_sonarr
     image: linuxserver/sonarr
     hostname: ${MINERVA_NETWORK_SONARR_HOSTNAME}
+    networks:
+      minerva:
+        aliases:
+          - ${MINERVA_NETWORK_SONARR_HOSTNAME}
     ports:
       - 8989:8989
     environment:
@@ -53,6 +61,10 @@ services:
     container_name: minerva_radarr
     image: linuxserver/radarr
     hostname: ${MINERVA_NETWORK_RADARR_HOSTNAME}
+    networks:
+      minerva:
+        aliases:
+          - ${MINERVA_NETWORK_RADARR_HOSTNAME}
     ports:
       - 7878:7878
     environment:
@@ -67,6 +79,10 @@ services:
     container_name: minerva_plex
     image: linuxserver/plex
     hostname: ${MINERVA_NETWORK_PLEX_HOSTNAME}
+    networks:
+      minerva:
+        aliases:
+          - ${MINERVA_NETWORK_PLEX_HOSTNAME}
     ports:
       - 3005:3005
       - 32400:32400
@@ -84,3 +100,6 @@ services:
       - ${HOME}/.Minerva/transcode:/transcode
     volumes_from:
       - volume_media
+
+networks:
+  minerva:
