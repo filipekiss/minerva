@@ -101,5 +101,23 @@ services:
     volumes_from:
       - volume_media
 
+  jackett:
+    container_name: minerva_jackett
+    image: linuxserver/jackett
+    hostname: ${MINERVA_NETWORK_JACKETT_HOSTNAME}
+    networks:
+      minerva:
+        aliases:
+          - ${MINERVA_NETWORK_JACKETT_HOSTNAME}
+    ports:
+      - 9117:9117
+    environment:
+      PGID: ${MINERVA_CONFIG_PGID}
+      PUID: ${MINERVA_CONFIG_PUID}
+    volumes:
+      - ${HOME}/.Minerva/config/jackett:/config
+      - ${MINERVA_LOCATION_TORRENT_WATCH}:/downloads
+    volumes_from:
+      - volume_media
 networks:
   minerva:

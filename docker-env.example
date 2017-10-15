@@ -38,3 +38,6 @@ MINERVA_NETWORK_RADARR_HOSTNAME=radarr.minerva
 #
 # plex
 MINERVA_NETWORK_PLEX_HOSTNAME=plex.minerva
+
+# jackett
+MINERVA_NETWORK_JACKETT_HOSTNAME=jackett.minerva
